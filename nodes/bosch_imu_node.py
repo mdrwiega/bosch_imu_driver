@@ -48,7 +48,7 @@ from dynamic_reconfigure.server import Server
 from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
 
 
-# BOSH BNO055 IMU Registers map and other information
+# BOSCH BNO055 IMU Registers map and other information
 # Page 0 registers
 CHIP_ID = 0x00
 PAGE_ID = 0x07
@@ -164,7 +164,7 @@ mag_msg = MagneticField()       # Magnetometer data
 
 # Main function
 if __name__ == '__main__':
-    rospy.init_node("imu_node")
+    rospy.init_node("bosch_imu_node")
 
     # Sensor measurements publishers
     pub_data = rospy.Publisher('imu/data', Imu, queue_size=1)
@@ -219,7 +219,7 @@ if __name__ == '__main__':
     if not(write_to_dev(ser, OPER_MODE, 1, OPER_MODE_NDOF)):
         rospy.logerr("Unable to set IMU operation mode into operation mode.")
 
-    rospy.loginfo("Bosh BNO055 IMU configuration complete.")
+    rospy.loginfo("Bosch BNO055 IMU configuration complete.")
 
     rate = rospy.Rate(frequency)
 

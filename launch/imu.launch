@@ -1,19 +1,19 @@
 <launch>
 
-  <!-- Run Bosh BNO055 IMU -->
-  <arg name="bosh_config_file" default="$(find bosh_imu_driver)/config/imu_bosh.yaml"/> 
-  <node pkg="bosh_imu_driver" type="bosh_imu_node.py" name="bosh_imu_node" output="screen">
-    <rosparam file="$(arg bosh_config_file)" command="load"/>
-    <remap from="/imu/data" to="/imu_bosh/data"/>
-    <remap from="/imu/raw" to="/imu_bosh/raw"/>
-    <remap from="/imu/temp" to="/imu_bosh/temp"/>
-    <remap from="/imu/mag" to="/imu_bosh/mag"/>
+  <!-- Run Bosch BNO055 IMU -->
+  <arg name="bosch_config_file" default="$(find bosch_imu_driver)/config/imu_bosch.yaml"/> 
+  <node pkg="bosch_imu_driver" type="bosch_imu_node.py" name="bosch_imu_node" output="screen">
+    <rosparam file="$(arg bosch_config_file)" command="load"/>
+    <remap from="/imu/data" to="/imu_bosch/data"/>
+    <remap from="/imu/raw" to="/imu_bosch/raw"/>
+    <remap from="/imu/temp" to="/imu_bosch/temp"/>
+    <remap from="/imu/mag" to="/imu_bosch/mag"/>
   </node>
 
 	<!-- IMU Bosh transformation publisher -->
-	<node name="base_link_to_imu_bosh"
+	<node name="base_link_to_imu_bosch"
 			pkg="tf" type="static_transform_publisher" 
-			args="0.0 0.0 0.0 0.0 0.0 0.0 base_link imu_bosh_link 200" />
+			args="0.0 0.0 0.0 0.0 0.0 0.0 base_link imu_bosch_link 200" />
 </launch>
 
 

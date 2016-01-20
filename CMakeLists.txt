@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bosh_imu_driver)
+project(bosch_imu_driver)
 
 find_package(catkin REQUIRED COMPONENTS)
 
@@ -22,6 +22,6 @@ install(DIRECTORY src
 )
 
 catkin_install_python(PROGRAMS 
-	nodes/bosh_imu_node.py
+	nodes/bosch_imu_node.py
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/nodes
 )

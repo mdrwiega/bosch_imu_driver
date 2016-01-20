@@ -1,13 +1,13 @@
 <package>
-  <name>bosh_imu_driver</name>
+  <name>bosch_imu_driver</name>
   <version>1.0.0</version>
   <author>Michal Drwiega</author>
   <maintainer email="drwiega.michal@gmail.com">Michal Drwiega</maintainer>
   <license>BSD</license>
-  <url type="website">http://ros.org/wiki/bosh_imu_driver</url>
+  <url type="website">http://ros.org/wiki/bosch_imu_driver</url>
 
 	<description>
-  This package contains the driver for IMU Bosh BNO055.
+  This package contains the driver for IMU Bosch BNO055.
   In current version only UART communication is implemented.
 	</description>	
 
