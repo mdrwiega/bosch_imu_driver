@@ -224,7 +224,7 @@ if __name__ == '__main__':
     rate = rospy.Rate(frequency)
 
     # Factors for unit conversions
-    acc_fact = 1000.0
+    acc_fact = 100.0
     mag_fact = 16.0
     gyr_fact = 900.0
     seq = 0
