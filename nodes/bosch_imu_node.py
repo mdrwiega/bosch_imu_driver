@@ -119,7 +119,9 @@ def read_from_dev(ser, reg_addr, length):
     buf_out.append(length)
 
     try:
-        ser.write(buf_out)
+        for byte in buf_out:
+            ser.write(chr(byte))
+            time.sleep(0.002)
         buf_in = bytearray(ser.read(2 + length))
 
         # print("Reading, wr: ", binascii.hexlify(buf_out), "  re: ", binascii.hexlify(buf_in))
