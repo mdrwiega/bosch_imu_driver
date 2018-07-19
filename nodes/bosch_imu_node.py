@@ -107,6 +107,7 @@ PWR_MODE_SUSPEND  = 0x02
 BNO055_ID = 0xa0
 START_BYTE_WR = 0xaa
 START_BYTE_RESP = 0xbb
+START_BYTE_ERR = 0xee
 READ = 0x01
 WRITE = 0x00
 
@@ -120,18 +121,33 @@ def read_from_dev(ser, reg_addr, length):
 
     try:
         ser.write(buf_out)
-        buf_in = bytearray(ser.read(2 + length))
-
-        # print("Reading, wr: ", binascii.hexlify(buf_out), "  re: ", binascii.hexlify(buf_in))
     except:
         return 0
 
-    # Check if response is correct
-    if (buf_in.__len__() != (2 + length)) or (buf_in[0] != START_BYTE_RESP):
-        #rospy.logerr("Incorrect Bosh IMU device response.")
-        return 0
-    buf_in.pop(0)
-    buf_in.pop(0)
+    buf_in = bytearray()
+    for i in range(5):
+        try:
+            buf_in.extend(ser.read((2+length)-buf_in.__len__()))
+        except:
+            pass
+
+        # Check if response is correct
+        if buf_in.__len__() == 0:
+            continue
+
+        if buf_in[0] == START_BYTE_ERR:
+            rospy.loginfo("Something bad when reading")
+            return 0
+
+        if buf_in[0] != START_BYTE_RESP:
+            rospy.loginfo("Incorrect Bosh IMU device response.")
+            return 0
+
+        if buf_in.__len__() == 2 + length:
+            buf_in.pop(0)
+            buf_in.pop(0)
+            break
+
     return buf_in
 
 
@@ -152,7 +168,7 @@ def write_to_dev(ser, reg_addr, length, data):
         return False
 
     if (buf_in.__len__() != 2) or (buf_in[1] != 0x01):
-        #rospy.logerr("Incorrect Bosh IMU device response.")
+        rospy.loginfo("Incorrect Bosh IMU device response.")
         return False
     return True
 
