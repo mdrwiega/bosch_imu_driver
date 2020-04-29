@@ -1,39 +1,5 @@
 #!/usr/bin/env python
 
-#####################################################################
-# Software License Agreement (BSD License)
-#
-# Copyright (c) 2016, Michal Drwiega
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
-#####################################################################
-
 import serial
 import rospy
 import sys
@@ -136,11 +102,11 @@ def read_from_dev(ser, reg_addr, length):
             continue
 
         if buf_in[0] == START_BYTE_ERR:
-            rospy.loginfo("Something bad when reading")
+            rospy.logwarn("Something bad when reading")
             return 0
 
         if buf_in[0] != START_BYTE_RESP:
-            rospy.loginfo("Incorrect Bosh IMU device response.")
+            rospy.logwarn("Incorrect Bosh IMU device response.")
             return 0
 
         if buf_in.__len__() == 2 + length:
@@ -168,7 +134,7 @@ def write_to_dev(ser, reg_addr, length, data):
         return False
 
     if (buf_in.__len__() != 2) or (buf_in[1] != 0x01):
-        rospy.loginfo("Incorrect Bosh IMU device response.")
+        rospy.logwarn("Incorrect Bosh IMU device response.")
         return False
     return True
 
@@ -263,9 +229,6 @@ if __name__ == '__main__':
             imu_raw.angular_velocity_covariance[0] = -1
             pub_raw.publish(imu_raw)
 
-            #            print("read: ", binascii.hexlify(buf), "acc = (",imu_data.linear_acceleration.x,
-            #                  imu_data.linear_acceleration.y, imu_data.linear_acceleration.z, ")")
-
             # Publish filtered data
             imu_data.header.stamp = rospy.Time.now()
             imu_data.header.frame_id = frame_id
@@ -299,11 +262,6 @@ if __name__ == '__main__':
             temperature_msg.header.seq = seq
             temperature_msg.temperature = buf[44]
             pub_temp.publish(temperature_msg)
-
-            #yaw = float(st.unpack('h', st.pack('BB', buf[18], buf[19]))[0]) / 16.0
-            #roll = float(st.unpack('h', st.pack('BB', buf[20], buf[21]))[0]) / 16.0
-            #pitch = float(st.unpack('h', st.pack('BB', buf[22], buf[23]))[0]) / 16.0
-            #           print "RPY=(%.2f %.2f %.2f)" %(roll, pitch, yaw)
 
             seq = seq + 1
         rate.sleep()
