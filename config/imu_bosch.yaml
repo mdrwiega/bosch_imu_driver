@@ -3,6 +3,6 @@ port: /dev/ttyUSB0
 # Tf frame id
 frame_id: imu_bosch_link
 # Data reading frequency
-freqency: 200
+frequency: 200
 # Sensor operation mode --> modes could be found in sensor datasheet
 operation_mode: 0x08
