@@ -159,7 +159,7 @@ if __name__ == '__main__':
     # Get parameters values
     port = rospy.get_param('~port', '/dev/ttyUSB0')
     frame_id = rospy.get_param('~frame_id', 'imu_link')
-    frequency = rospy.get_param('frequency', 100)
+    frequency = rospy.get_param('~frequency', 100)
     operation_mode = rospy.get_param('operation_mode', OPER_MODE_NDOF)
 
     # Open serial port
