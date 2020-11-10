@@ -161,6 +161,8 @@ if __name__ == '__main__':
     frame_id = rospy.get_param('~frame_id', 'imu_link')
     frequency = rospy.get_param('frequency', 100)
     operation_mode = rospy.get_param('~operation_mode', OPER_MODE_NDOF)
+    axis_remap_config = rospy.get_param('~axis_remap_config', 0x24)
+    axis_remap_sign = rospy.get_param('~axis_remap_sign', 0x00)
 
     # Open serial port
     rospy.loginfo("Opening serial port: %s...", port)
@@ -192,10 +194,10 @@ if __name__ == '__main__':
     if not(write_to_dev(ser, UNIT_SEL, 1, 0x83)):
         rospy.logerr("Unable to set IMU units.")
 
-    if not(write_to_dev(ser, AXIS_MAP_CONFIG, 1, 0x24)):
+    if not(write_to_dev(ser, AXIS_MAP_CONFIG, 1, axis_remap_config)):
         rospy.logerr("Unable to remap IMU axis.")
 
-    if not(write_to_dev(ser, AXIS_MAP_SIGN, 1, 0x06)):
+    if not(write_to_dev(ser, AXIS_MAP_SIGN, 1, axis_remap_sign)):
         rospy.logerr("Unable to set IMU axis signs.")
 
     if not(write_to_dev(ser, OPER_MODE, 1, operation_mode)):
