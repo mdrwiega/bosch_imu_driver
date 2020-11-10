@@ -159,7 +159,7 @@ if __name__ == '__main__':
     # Get parameters values
     port = rospy.get_param('~port', '/dev/ttyUSB0')
     frame_id = rospy.get_param('~frame_id', 'imu_link')
-    frequency = rospy.get_param('frequency', 100)
+    frequency = rospy.get_param('~frequency', 100)
     operation_mode = rospy.get_param('~operation_mode', OPER_MODE_NDOF)
     axis_remap_config = rospy.get_param('~axis_remap_config', 0x24)
     axis_remap_sign = rospy.get_param('~axis_remap_sign', 0x00)
