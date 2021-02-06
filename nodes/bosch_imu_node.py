@@ -160,7 +160,7 @@ if __name__ == '__main__':
     port = rospy.get_param('~port', '/dev/ttyUSB0')
     frame_id = rospy.get_param('~frame_id', 'imu_link')
     frequency = rospy.get_param('~frequency', 100)
-    operation_mode = rospy.get_param('operation_mode', OPER_MODE_NDOF)
+    operation_mode = rospy.get_param('~operation_mode', OPER_MODE_NDOF)
 
     # Open serial port
     rospy.loginfo("Opening serial port: %s...", port)
@@ -198,7 +198,7 @@ if __name__ == '__main__':
     if not(write_to_dev(ser, AXIS_MAP_SIGN, 1, 0x06)):
         rospy.logerr("Unable to set IMU axis signs.")
 
-    if not(write_to_dev(ser, OPER_MODE, 1, OPER_MODE_NDOF)):
+    if not(write_to_dev(ser, OPER_MODE, 1, operation_mode)):
         rospy.logerr("Unable to set IMU operation mode into operation mode.")
 
     rospy.loginfo("Bosch BNO055 IMU configuration complete.")
