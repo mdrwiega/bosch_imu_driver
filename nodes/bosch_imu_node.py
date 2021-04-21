@@ -191,7 +191,8 @@ if __name__ == '__main__':
     if not(write_to_dev(ser, SYS_TRIGGER, 1, 0x00)):
         rospy.logerr("Unable to start IMU.")
 
-    if not(write_to_dev(ser, UNIT_SEL, 1, 0x83)):
+    # acc: ms^-2, ang: rad/s, euler: rad, temp: C
+    if not(write_to_dev(ser, UNIT_SEL, 1, 0x86)):
         rospy.logerr("Unable to set IMU units.")
 
     if not(write_to_dev(ser, AXIS_MAP_CONFIG, 1, axis_remap_config)):
@@ -208,9 +209,10 @@ if __name__ == '__main__':
     rate = rospy.Rate(frequency)
 
     # Factors for unit conversions
-    acc_fact = 1000.0
+    acc_fact = 100.0 # 1ms^-2 = 100 LSB
     mag_fact = 16.0
     gyr_fact = 900.0
+    quat_fact = 16384
     seq = 0
 
     while not rospy.is_shutdown():
@@ -235,10 +237,10 @@ if __name__ == '__main__':
             imu_data.header.stamp = rospy.Time.now()
             imu_data.header.frame_id = frame_id
             imu_data.header.seq = seq
-            imu_data.orientation.w = float(st.unpack('h', st.pack('BB', buf[24], buf[25]))[0])
-            imu_data.orientation.x = float(st.unpack('h', st.pack('BB', buf[26], buf[27]))[0])
-            imu_data.orientation.y = float(st.unpack('h', st.pack('BB', buf[28], buf[29]))[0])
-            imu_data.orientation.z = float(st.unpack('h', st.pack('BB', buf[30], buf[31]))[0])
+            imu_data.orientation.w = float(st.unpack('h', st.pack('BB', buf[24], buf[25]))[0]) / quat_fact
+            imu_data.orientation.x = float(st.unpack('h', st.pack('BB', buf[26], buf[27]))[0]) / quat_fact
+            imu_data.orientation.y = float(st.unpack('h', st.pack('BB', buf[28], buf[29]))[0]) / quat_fact
+            imu_data.orientation.z = float(st.unpack('h', st.pack('BB', buf[30], buf[31]))[0]) / quat_fact
             imu_data.linear_acceleration.x = float(st.unpack('h', st.pack('BB', buf[32], buf[33]))[0]) / acc_fact
             imu_data.linear_acceleration.y = float(st.unpack('h', st.pack('BB', buf[34], buf[35]))[0]) / acc_fact
             imu_data.linear_acceleration.z = float(st.unpack('h', st.pack('BB', buf[36], buf[37]))[0]) / acc_fact
